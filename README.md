@@ -56,3 +56,81 @@
 
 * JPA는 애플리케이션과 JDBC사이에서 동작
 <img alt="image1" src ="https://github.com/jay-one11/JPA_study/blob/5cdb23ba893bd9d0631e980ea790fc21a683c1f0/image/JPA%EA%B5%AC%EC%A1%B0.PNG">
+
+* JPA 동작
+    1. 저장
+        <img alt="JPA-저장" src="">
+        - JPA는 JDBC API를 활용하여 DB와 통신
+    2. 조회
+        <img alt="JPA-조회" src="">
+        - JPA는 column 의 mapping 정보를 바탕으로 조회, ResultSet을 DB에서 얻어옴.
+
+* JPA 소개
+    <img alt="JPA소개" src="">
+    - JPA는 인터페이스의 모음
+    - 하이버네이트, EclipseLink, DataNucleus
+    - JPA 2.2 사용
+
+* JPA를 왜 사용해야 하는가?
+    - SQL중심적인 개발에서 객체 중심으로 개발
+    - 생산성
+    - 유지보수
+    - 패러다임의 불일치 해결 ⭐⭐
+    - 성능
+    - 데이터 접근 추상화와 벤더 독립성
+    - 표준
+
+1. 생산성
+    - 저장 : jpa.persist(member)
+    - 조회 : Memeber member = jpa.find(memberid)
+    - 수정 : member.setName("변경할 이름")
+        >> 다른 조건 없이 스스로 JPA가 찾아서 바꿔줌 💙 
+    - 삭제 : jpa.remove(member)
+
+2. 유지보수
+    - <img alt="유지보수" src="">
+    - 기존 : 필드 변경 시 모든 SQL 수정
+    - <img alt="유지보수2" src="" >
+    - JPA : 필드만 추가하면 알아서 JPA가 SQL문까지 수정
+
+3. JPA와 패러다임 불일치 해결
+    1. JPA와 상속
+    <img alt="패러다임-상속" src="">
+    <img alt="패러다임-저장" src="">
+        - : JPA가 알아서 Query 여러개로 쪼개준다.
+    <img alt="패러다임-조회" src="">
+        - : JPA가 알아서 Join까지 QUery로 가져온다.
+
+    2. 연관관계 저장
+    <img alt="연관관계, 객체 그래프 탐색" src="">
+        - 마치 java collection을 사용하는 것처럼 편하게 사용할 수 있다.
+
+    3. 신뢰할 수 있는 엔티티, 계층
+    <img alt="신뢰-엔티티-계층" src="">
+
+    4. JPA와 비교하기
+    <img alt="JPA와 비교하기" src="">
+        * 🌟동일한 트랜잭션에서 조회한 엔티티는 같은 객체임을 보장
+
+4. JPA의 성능 최적화 기능
+    1. 1차 캐시와 동일성 보장
+        1. 같은 트랜잭션 안에서는 같은 엔티티를 반환 - 약간의 조회 성능 향상
+            - 캐싱 기능을 통해서 기존의 값 다시 제공
+        2. DB Isolation Level 이 Read Commit 이어도 Application에서 Repeatable Read 보장
+        <img alt="DB-Isolation" src="">
+    2. 트랜잭션을 지원하는 쓰기 지연
+        - 버퍼링 기능
+        1. Insert
+            1. 트랜잭션을 Commit할 때까지 Insert Sql을 모음
+            2. JDBC BATCH SQL 기능을 사용해서 한번에 SQL 전송
+            3. Commit 하는 순간 한번에 보낸다.
+            <img alt="쓰기지연 ISERT" src="">
+        2. Update
+            <img alt="쓰기지연 Update" src="">
+    3. 지연 로딩
+        - 지연 로딩 : 객체가 실제 사용될 때 로딩
+        - 즉시 로딩 : JOIN SQL로 한번에 연관된 객체끼리 미리 조회
+        <img alt="지연,즉시로딩" src="">
+
+* ORM 은 객체와 RDB 두 기둥위에 있는 기술..
+    - 그래도 db 기술은 생명이 길기 때문에 관계형 db 기술도 소홀히하지 맙시다..

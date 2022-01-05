@@ -24,7 +24,7 @@
 
 ### JPA와 Modern Java Data Store Tech
 
-[SQL 중심적인 개발의 문제점]()
+[SQL 중심적인 개발의 문제점](/[text]())
 
 1. SQL 중심적인 개발의 문제점
     - 객체를 관계형 DB에 저장하는 시대
@@ -55,4 +55,4 @@
 
 
 * JPA는 애플리케이션과 JDBC사이에서 동작
-![alt]()
+<img alt="image1" src ="https://github.com/jay-one11/JPA_study/blob/5cdb23ba893bd9d0631e980ea790fc21a683c1f0/image/JPA%EA%B5%AC%EC%A1%B0.PNG">

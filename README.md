@@ -59,14 +59,14 @@
 
 * JPA 동작
     1. 저장
-        <img alt="JPA-저장" src="">
+        <img alt="JPA-저장" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/JPA%EB%8F%99%EC%9E%91-%EC%A0%80%EC%9E%A5.PNG">
         - JPA는 JDBC API를 활용하여 DB와 통신
     2. 조회
-        <img alt="JPA-조회" src="">
+        <img alt="JPA-조회" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/JPA%EB%8F%99%EC%9E%91-%EC%A1%B0%ED%9A%8C.PNG">
         - JPA는 column 의 mapping 정보를 바탕으로 조회, ResultSet을 DB에서 얻어옴.
 
 * JPA 소개
-    <img alt="JPA소개" src="">
+    <img alt="JPA소개" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/JPA%EC%86%8C%EA%B0%9C.PNG">
     - JPA는 인터페이스의 모음
     - 하이버네이트, EclipseLink, DataNucleus
     - JPA 2.2 사용
@@ -88,28 +88,28 @@
     - 삭제 : jpa.remove(member)
 
 2. 유지보수
-    - <img alt="유지보수" src="">
+    - <img alt="유지보수" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/JPA%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%981.PNG">
     - 기존 : 필드 변경 시 모든 SQL 수정
-    - <img alt="유지보수2" src="" >
+    - <img alt="유지보수2" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/JPA%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%982.PNG" >
     - JPA : 필드만 추가하면 알아서 JPA가 SQL문까지 수정
 
 3. JPA와 패러다임 불일치 해결
     1. JPA와 상속
-    <img alt="패러다임-상속" src="">
-    <img alt="패러다임-저장" src="">
+    <img alt="패러다임-상속" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%ED%8C%A8%EB%9F%AC%EB%8B%A4%EC%9E%84-%EC%83%81%EC%86%8D1.PNG">
+    <img alt="패러다임-저장" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%ED%8C%A8%EB%9F%AC%EB%8B%A4%EC%9E%84-%EC%A0%80%EC%9E%A5.PNG">
         - : JPA가 알아서 Query 여러개로 쪼개준다.
-    <img alt="패러다임-조회" src="">
+    <img alt="패러다임-조회" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%ED%8C%A8%EB%9F%AC%EB%8B%A4%EC%9E%84-%EC%A1%B0%ED%9A%8C.PNG">
         - : JPA가 알아서 Join까지 QUery로 가져온다.
 
     2. 연관관계 저장
-    <img alt="연관관계, 객체 그래프 탐색" src="">
+    <img alt="연관관계, 객체 그래프 탐색" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%EC%97%B0%EA%B4%80%EA%B4%80%EA%B3%84-%EA%B0%9D%EC%B2%B4.PNG">
         - 마치 java collection을 사용하는 것처럼 편하게 사용할 수 있다.
 
     3. 신뢰할 수 있는 엔티티, 계층
-    <img alt="신뢰-엔티티-계층" src="">
+    <img alt="신뢰-엔티티-계층" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%EC%8B%A0%EB%A2%B0-%EC%97%94%ED%8B%B0%ED%8B%B0.PNG">
 
     4. JPA와 비교하기
-    <img alt="JPA와 비교하기" src="">
+    <img alt="JPA와 비교하기" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/JPA%EC%99%80%20%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0.PNG">
         * 🌟동일한 트랜잭션에서 조회한 엔티티는 같은 객체임을 보장
 
 4. JPA의 성능 최적화 기능
@@ -117,20 +117,20 @@
         1. 같은 트랜잭션 안에서는 같은 엔티티를 반환 - 약간의 조회 성능 향상
             - 캐싱 기능을 통해서 기존의 값 다시 제공
         2. DB Isolation Level 이 Read Commit 이어도 Application에서 Repeatable Read 보장
-        <img alt="DB-Isolation" src="">
+        <img alt="DB-Isolation" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%EC%93%B0%EA%B8%B0%EC%A7%80%EC%97%B0%EC%9E%A5%EC%A0%90.PNG">
     2. 트랜잭션을 지원하는 쓰기 지연
         - 버퍼링 기능
         1. Insert
             1. 트랜잭션을 Commit할 때까지 Insert Sql을 모음
             2. JDBC BATCH SQL 기능을 사용해서 한번에 SQL 전송
             3. Commit 하는 순간 한번에 보낸다.
-            <img alt="쓰기지연 ISERT" src="">
+            <img alt="쓰기지연 ISERT" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%EC%93%B0%EA%B8%B0%EC%A7%80%EC%97%B0-INSERT.PNG">
         2. Update
-            <img alt="쓰기지연 Update" src="">
+            <img alt="쓰기지연 Update" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%EC%93%B0%EA%B8%B0%EC%A7%80%EC%97%B0-UPDATE.PNG">
     3. 지연 로딩
         - 지연 로딩 : 객체가 실제 사용될 때 로딩
         - 즉시 로딩 : JOIN SQL로 한번에 연관된 객체끼리 미리 조회
-        <img alt="지연,즉시로딩" src="">
+        <img alt="지연,즉시로딩" src="https://github.com/jay-one11/JPA_study/blob/7a73078c117fb0608b70be23f489dd7d3f8febe5/image/%EC%A7%80%EC%97%B0,%EC%A6%89%EC%8B%9C%EB%A1%9C%EB%94%A9.PNG">
 
 * ORM 은 객체와 RDB 두 기둥위에 있는 기술..
     - 그래도 db 기술은 생명이 길기 때문에 관계형 db 기술도 소홀히하지 맙시다..

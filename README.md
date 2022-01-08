@@ -358,7 +358,7 @@
         - JPA가 실제로 내부에서 어떻게 동작하는지 ?
 
 - EntityManagerFactory, EntityManager
-<img alt="Emf&EM" src="">
+<img alt="Emf&EM" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/ENF&EM.PNG">
     - EMF 를 통해서 고객의 요청 시마다 EM을 생성
     - EM은 내부적으로 DBconnection을 통해서 DB 사용
 
@@ -375,11 +375,11 @@
     - 눈에 보이지 않느다.
     - 엔티티 매니저를 통해서 영속성 컨텍스트에 접근한다.
         -  J2SE환경
-            <img alt="J2SE" src="">
+            <img alt="J2SE" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/JS2E.PNG">
             - EM 생성하면 1:1로 영속성 컨텍스트가 생성된다.
 
 - 엔티티의 생명 주기
-    <img alt="Entity-lifecycle" src="">
+    <img alt="Entity-lifecycle" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/Entity-lifeCycle.PNG">
     - 비영속 ( new / transient )
         : 영속성 컨텍스트와 전혀 관계가 없는 새로운 상태
     - 양석 ( managed )
@@ -391,7 +391,7 @@
 
     
 - 비영속
-    <img alt="new" src="">
+    <img alt="new" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/new.PNG">
     - 멤버 객체를 생성하고, EM에 아무런 연결을 하지 않은 상태
     ```
     Member member = new Member();
@@ -400,7 +400,7 @@
     ```
 
 - 영속
-    <img alt="managed" src="">
+    <img alt="managed" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/managed.PNG">
     - 멤버 객체를 생성하고, EM를 생성해서, persist를 통해 영속성을 부여한 상태
     - 영속성 컨텍스트를 통해서 관리가 되는 시점
     ```
@@ -416,7 +416,7 @@
     System.out.println(("----------after---------"));
 
     ```
-    - 실행결과 : <img alt="before-after1" src="">
+    - 실행결과 : <img alt="before-after1" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/before-after2.PNG">
     - ⭐ DB에 저장되지는 않은 상태.
     - tx.commit 하는 순간 쿼리가 날아갑니다
 
@@ -439,13 +439,13 @@
 
 
 - 엔티티 조회, 1차 캐싱
-    <img alt="엔티티조회" src="">
+    <img alt="엔티티조회" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/Entity-search.PNG">
     - `em.persist(member);`를 통해서 entity를 영속화 시키면, 영속 컨텍스트의 1차 캐시 내부에 entity가 담기게 된다.
     - 1차 캐시 내에 entity 는 PK - Entity 형태로 저장된다.
         - JPA는 `em.find()`를 수행할 때, 1차캐시를 먼저 탐색한다. 이 이때 PK와 일치하는 값이 있다면 바로 조회해온다 ( 성능 향상 )
-        <img alt="1차캐시조회" src="">
+        <img alt="1차캐시조회" src="https://github.com/jay-one11/JPA_study/blob/bfddf1673086baa34194c5df34e42fc19296f0ef/image/1%EC%B0%A8%20%EC%BA%90%EC%8B%9C%EC%97%90%EC%84%9C%20%EC%A1%B0%ED%9A%8C.PNG">
         - 만약 1차 캐시에 원하는 값이 없다면 DB에서 조회해서 1차캐시에 저장하고, 사용자에게 반환한다.
-        <img alt="1차캐시조회2" src="">
+        <img alt="1차캐시조회2" src="https://github.com/jay-one11/JPA_study/blob/d130ce03c15b8f6d2e42a009663b4d147f155d9d/image/1%EC%B0%A8%20%EC%BA%90%EC%8B%9C%EC%97%90%EC%84%9C%20%EC%A1%B0%ED%9A%8C2.PNG">
     - 사실, 트랜잭션이 끝나면 EntityManager 또한 종료되기 때문에 매번 초기화 하는 특성 상 많은 성능 향상이 되진 않는다. (복잡한 비즈니스 로직에서 유용함)
     - 성능의 이점은 2차캐시에서 성능 향상!
     - Example 

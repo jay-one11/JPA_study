@@ -208,7 +208,7 @@
     ```
 
 ※ 데이터 베이스 방언
- <img alt="데이터베이스 방언" src="">
+ <img alt="데이터베이스 방언" src="https://github.com/jay-one11/JPA_study/blob/a65cebbf1379aa1948e98678bbe2e02787cf19ed/image/JPA%EB%B0%A9%EC%96%B8.PNG">
  - hibernate를 통해 데이터베이스 방언 통역
  - `hibernate.dialect` 속성에 지정
     - H2 : org.hibernate.dialect.H2Dialect
@@ -220,7 +220,7 @@
 
 ### 2. JPA 구동 방식
 
-<img alt="JPA구동 방식" src = "">
+<img alt="JPA구동 방식" src = "https://github.com/jay-one11/JPA_study/blob/a65cebbf1379aa1948e98678bbe2e02787cf19ed/image/JPA%EA%B5%AC%EB%8F%99%20%EB%B0%A9%EC%8B%9D.PNG">
 
 
 1. DB 만들기

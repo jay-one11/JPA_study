@@ -527,29 +527,29 @@
     ```
 
 ### 2. 플러시
-    - 영속성 컨텍스트 변경내용을 데이터베이스에 반영하는 작업
-    - 보통 Commit() 될때 영속성 컨텍스트 => DB로 Flush
-    - 플러시가 발생할 때 일어나는 일
-        - 변경 감지 (dirty checking)
-        - 수정된 엔티티 쓰기지연 SQL저장소에 등록
-        - 쓰기지연 SQL저장소의 쿼리를 DB에 전송 (등록, 수정, 삭제)
-    - persistence Context를 Flush 하는 방법
-        1. `em.flush()` : 직접 수동 호출 ( 거의 사용할 일 없음 / test용 )
-            - ※ 원할 때 Query를 보낼 수 있음. ( 비추 , 테스트용 )
-            - 1차 캐시는 유지되고 쓰기 지연 SQL저장소, 변경감지 된 엔티티들이 DB에 반영되는 과정
-        2. `tx.commit()` : ⭐ flush 자동 호출 
-        3. JPQL query 수행 : flush 자동 호출
-            <img src="" alt="Flush-JPQL">
-            - Member A,B,C 는 JPQL Query를 수행하는 시점에서 Commit이 되어있지 않기 때문에 DB에 반영되지 않았다.
-            - 따라서 ` List<member> members` 는 빈 List가 되어진다.
-            - ⭐ 이러한 오류를 방지하기 위해 JPA는 JPQL을 사용할 때 자동으로 commit을 수행하기 때문에 `List<member> members`에는 member A,B,C의 Entity가 정상적으로 저장되어질 수 있다 ⭐
-    
-    - Flush Mode Option
-        `em.setFlushMode(FlushModeType.COMMIT)`
-        - `FlushModeType.AUTO` : Commit이나 QUery를 실행할 때 Flush(default)
-        - `FlushModeType.COMMIT` : Commit할 시에만 Flush
-            - 지금 가진 Query를 flush하지 않고 table을 조회하고 싶은 경우
-            - 조회하고자 하는 Query에서 Flush할 Query가 의미 없는 경우
+- 영속성 컨텍스트 변경내용을 데이터베이스에 반영하는 작업
+- 보통 Commit() 될때 영속성 컨텍스트 => DB로 Flush
+- 플러시가 발생할 때 일어나는 일
+    - 변경 감지 (dirty checking)
+    - 수정된 엔티티 쓰기지연 SQL저장소에 등록
+    - 쓰기지연 SQL저장소의 쿼리를 DB에 전송 (등록, 수정, 삭제)
+- persistence Context를 Flush 하는 방법
+    1. `em.flush()` : 직접 수동 호출 ( 거의 사용할 일 없음 / test용 )
+        - ※ 원할 때 Query를 보낼 수 있음. ( 비추 , 테스트용 )
+        - 1차 캐시는 유지되고 쓰기 지연 SQL저장소, 변경감지 된 엔티티들이 DB에 반영되는 과정
+    2. `tx.commit()` : ⭐ flush 자동 호출 
+    3. JPQL query 수행 : flush 자동 호출
+        <img src="" alt="Flush-JPQL">
+        - Member A,B,C 는 JPQL Query를 수행하는 시점에서 Commit이 되어있지 않기 때문에 DB에 반영되지 않았다.
+        - 따라서 ` List<member> members` 는 빈 List가 되어진다.
+        - ⭐ 이러한 오류를 방지하기 위해 JPA는 JPQL을 사용할 때 자동으로 commit을 수행하기 때문에 `List<member> members`에는 member A,B,C의 Entity가 정상적으로 저장되어질 수 있다 ⭐
+
+- Flush Mode Option
+    `em.setFlushMode(FlushModeType.COMMIT)`
+    - `FlushModeType.AUTO` : Commit이나 QUery를 실행할 때 Flush(default)
+    - `FlushModeType.COMMIT` : Commit할 시에만 Flush
+        - 지금 가진 Query를 flush하지 않고 table을 조회하고 싶은 경우
+        - 조회하고자 하는 Query에서 Flush할 Query가 의미 없는 경우
 
 - ※ 플러시는 !
     - persistence Context를 비우지 않음

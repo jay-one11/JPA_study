@@ -461,22 +461,22 @@
     ```
 
     - 위와 같은 경우, 처음 find를 통해서 불러온 findmember1은 1차 캐시에 저장되기 때문에 findmember2를 불러올 때는  1차 캐시 내에 있는 값을 그대로 가져오기 때문에 query가 생성되지 않는다.
-    <img alt="1차캐싱결과" src="">
+    <img alt="1차캐싱결과" src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/1%EC%B0%A8%EC%BA%90%EC%8B%B1%EC%A1%B0%ED%9A%8C-%EA%B2%B0%EA%B3%BC1.PNG">
 
     - 사실 성능적인 장점보다는 객체지향적인 컨셉적 이점이 크다.
 
 - 영속 엔티티의 동일성 보장
-    <img alt="영속엔티티의동일성보장" src="">
+    <img alt="영속엔티티의동일성보장" src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/%EC%98%81%EC%86%8D%EC%84%B1%EC%97%94%ED%8B%B0%ED%8B%B0%EC%9D%98%EB%8F%99%EC%9D%BC%EC%84%B1%EB%B3%B4%EC%9E%A5.PNG">
     - JPA는 영속 엔티티의 동일성을 보장한다.
     - 위의 findMember1과 Findmember2는 서로 같은 객체라는 것을 보장한다.
     - 단, 같은 트랜잭션 내에서 실행 시 !
 
 - 엔티티 등록 시 트랜잭션을 지원하는 쓰기 지연
-    <img src="" alt="트랜잭션을지원하는쓰기지연">
+    <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EC%9D%84%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94%EC%93%B0%EA%B8%B0%EC%A7%80%EC%97%B0.PNG" alt="트랜잭션을지원하는쓰기지연">
     - Commit하기 전까지 JPA에 Insert query를 저장했다가 , Commit을 하는 순간 DB에 해당 query를 보낸다.
-     <img src="" alt="트랜잭션을지원하는쓰기지연2">
+     <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EC%9D%84%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94%EC%93%B0%EA%B8%B0%EC%A7%80%EC%97%B02.PNG" alt="트랜잭션을지원하는쓰기지연2">
      - 영속 컨텍스트 내의 "쓰기지연 SQL저장소"에 Insert SQL을 생성하고 1차 캐시에 저장한다.
-     <img src="" alt="트랜잭션을지원하는쓰기지연3">
+     <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EC%9D%84%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94%EC%93%B0%EA%B8%B0%EC%A7%80%EC%97%B03.PNG" alt="트랜잭션을지원하는쓰기지연3">
      - Commit을 하는 순간 한번에 SQL문이 실행 ( Flush ) 되어 SQL query가 수행된다.
      - Example
      ```        
@@ -490,7 +490,7 @@
         tx.commit();
      ```
      - 결과 
-     <img src="" alt="쓰기지연결과">
+     <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/%EC%93%B0%EA%B8%B0%EC%A7%80%EC%97%B0%EA%B2%B0%EA%B3%BC.PNG" alt="쓰기지연결과">
      - 쓰기 지연의 장점
         - 옵션 하나로 성능을 향상시킬 수 있음.
         - buffer를 통해 한다는 점
@@ -498,7 +498,7 @@
 
 
 - Entity 수정 / 변경 감지
-    <img src="" alt="엔티티수정변경감지">
+    <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/%EC%97%94%ED%8B%B0%ED%8B%B0%EC%88%98%EC%A0%95-%EB%B3%80%EA%B2%BD%EA%B0%90%EC%A7%80.PNG" alt="엔티티수정변경감지">
     ```
     Member findMember1 = em.find(Member.class, 150L);
     findMember1.setName("zzzzz");
@@ -508,13 +508,13 @@
     ```
     - 결과
         - 수정 전
-        <img src="" alt="엔티티수정전">
+        <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/update%EC%A0%84.PNG" alt="엔티티수정전">
         - 수정 후
-         <img src="" alt="엔티티수정후">
+         <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/update%ED%9B%84.PNG" alt="엔티티수정후">
     
     - JPA는 변경 감지 기능으로 Entity Update 기능을 제공한다.
     - 마치 Collection을 사용하듯이 쉽게 변경할 수 있는 기능
-    <img src="" alt="dirtychecking">
+    <img src="https://github.com/jay-one11/JPA_study/blob/b8212b112570411cb9c6d9f862ac3260a8012b18/image/DirtyChecking.PNG" alt="dirtychecking">
         - 1. 과정에서 Entity를 변경 후 commit을 하게되면
         - 2. 과정과 같이 Entity와 스냅샷(값을 읽어온 최초 시점의 Entity정보)을 비교
         - 3. Entity와 스냅샷의 값이 다르다면 쓰기지연 SQL저장소에 Update Query를 생성한다.

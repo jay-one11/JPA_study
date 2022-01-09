@@ -19,7 +19,7 @@
     <img src="./src/main/resources/images/Homepage.PNG" alt="Homepage">
 
 ## 도메인 모델 분석
-<img src="./src/main/resources/images/도메인모델분석.PNG" alt="도메인모델분석">
+<img src="./src/main/resources/images/도메일모델분석.PNG" alt="도메인모델분석">
 - 회원과 주문의 관계 : 회원은 여러번 주문할 수 있다. (1:N)
 - 주문과 상품의 관계 : 주문할 때 여러 상품을 선택할 수 있다. 반대로 같은 상품도 여러번 주문될 수 있다. 주문 상품이라는 모델을 만들어서 N:M 관계를 1:N N:1 관계로 풀어낸다.
 

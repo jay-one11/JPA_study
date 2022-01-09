@@ -20,7 +20,7 @@
     - JPA가 언제 SQL을 실행하는지
 
 
-## 1차시
+## 1차시 JPA소개
 
 ### JPA와 Modern Java Data Store Tech
 
@@ -137,7 +137,7 @@
 
 
 
-## 2차시
+## 2차시 JPA 시작하기
 --- 
 ### 1. JPA 프로젝트 생성
 
@@ -349,7 +349,7 @@
 
 
 -----
-## 영속성 관리
+## 3차시 영속성 관리 - 내부 동작 방식
 
 ### 1. 영속성 컨텍스트
 - JPA에서 가장 중요한 2가지
@@ -596,3 +596,157 @@
     3. em.close()
         - 영속성 컨텍스트를 종료
         - 1차 캐시 자체를 사용할 수 없음
+
+------------
+
+## 4차시 Entity Mapping
+
+### 1. 객체와 테이블 매핑
+
+1. 엔티티 매핑 소개
+    - 객체와 테이블 매핑 : `@Entity` , `@Table`
+    - 필드와 컬럼 매핑 : `@Column`
+    - 기본 키 매핑 : `@Id`
+    - 연관 관계 매핑 : `@ManyToOne`(1:N Mapping), `@JoinColumn`
+
+<img src="https://github.com/jay-one11/JPA_study/blob/4697430837f1abdefd3195623435465f353c20c2/image/Entity&Table%20example.PNG" alt="Entity&Table example1">
+
+- `@Entity`
+    - `@Entity`가 붙은 클래스는 JPA가 관리하며, '엔티티'라고 한다.
+    - JPA를 사용해서 테이블과 매핑할 클래스는 `@Entity` 가 필수
+    - 🚩 주의할 점 🚩
+        - `@Entity`를 붙일 클래스는 반드시 기본 생성자가 있어야 한다.
+        - final, enum, interface, inner 클래스 사용 ❌❌
+        - 저장할 필드에 Final 사용 ❌
+    - 속성 : Name
+        - JPA에서 사용할 엔티티 이름을 지정한다.
+        - 기본 값 : 클래스 이름을 그대로 사용 ( 예 : Member )
+        - 같은 클래스 이름이 없으면 가급적 기본 값을 사용 ( 혼동 방지 )
+
+
+- `@Table`
+    - `@Table`은 엔티티와 매필할 테이블 지정
+    <img src="https://github.com/jay-one11/JPA_study/blob/4697430837f1abdefd3195623435465f353c20c2/image/@table.PNG" alt="@Table">
+    - 속성을 통해 name, catalog, schema 등을 매칭 가능 ( 추후에 다룸 )
+
+
+### 2. Database Schema Auto Create
+
+- 데이터베이스 스키마 자동 생성
+    - DDL을 애플리케이션 실행 시점에 자동 생성
+        - 객체를 매핑하면 스스로 테이블을 만들어 줌
+    - 테이블 중심 -> 객체 중심
+    - 데이터베이스 방언을 활용해서 데이터베이스에 맞는 적절한 DDL 생성
+        - DDL이 생성 될 때 방언에 맞게 적절한 쿼리 생성
+    - 이렇게 생성된 DDL은 개발 장비에서만 사용 ( 운영에서 사용 ❌)
+    - 생성된 DDL은 운영 서버에서는 사용하지 않거나, 적절히 다듬은 후 사용
+
+- 데이터 베이스 스키마 자동 생성 - 속성
+    - `hibernate.hbm2ddl.auto`
+        - persistence.xml 파일의 property중 하나,
+        - `<property name="hibernate.hbm2ddl.auto" value="create" />`
+        - value를 `create`로 설정 시
+        ```
+        Hibernate: 
+            
+            drop table Member if exists
+        Hibernate: 
+            
+            create table Member (
+            id bigint not null,
+                age integer not null,
+                name varchar(255),
+                primary key (id)
+            )
+        ```
+        - 위와 같이 drop table 후 create table을 수행한다. ( 테이블 초기화 후 수행 )
+        - 빠르게 Table을 수정할 때 편리함
+        <img src="https://github.com/jay-one11/JPA_study/blob/4697430837f1abdefd3195623435465f353c20c2/image/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4%20%EC%8A%A4%ED%82%A4%EB%A7%88%20%EC%9E%90%EB%8F%99%20%EC%83%9D%EC%84%B1%20-%20%EC%86%8D%EC%84%B1.PNG" alt="데이터베이스 스키마 자동 생성 - 속성">
+        - update : Alter ( column 추가만 됨, 지우기 ❌ )
+        - validate : 컬럼에 없을 시 `missing column` error 발생
+
+- 데이터 베이스 스키마 자동 생성 - 실습
+    - 스키마 자동 생성하기 설정
+    - 스키마 자동 생성하기 실행, 옵션별 확인
+    - 데이터베이스 방언 별로 달라지는 것 확인
+        - `persistence.xml` 파일에서 ` <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>` 을 언어에 따라 변경하였을 때 저장되는 타입이 달라짐.
+
+- 데이터베이스 스키마 자동 생성 - 주의
+    - 🚩 운영 장비에는 절대 create, create-drop, update 사용 금지  🚩
+    - 개발 초기에는 create 또는 update
+    - 테스트 서버에는 update 또는 validate
+    - 스테이징과 운영 서버에는 validate 또는 none
+    - 🏴‍☠️ 운영 서버에서 DB의 Column을 직접 조작한다는 것은 엄청난 장애 초래 가능 가급적이면 직접으로 스크립트를 만든 후에 테스트 서버 확인 후 조작할 것!!!  🏴‍☠️
+
+
+- DDL 생성 기능
+    - 제약 조건 추가 : 회원 이름은 필수, 10자 초과 X
+        - `@Column(nullable = false, length = 10)`
+    - 유니크 제약 조건 추가 
+        - `@Table(UniqueConstraints ={@UniqueConstraint(name = "Name_AGE_UNIQUE", columnNames={"Name","AGE"})})`
+    - DDL의 생성 기능은 DDL을 자동 생성할 때만 사용 되고 JPA의 실행 로직에는 영향을 주지 않는다. (= Alter 가 한번 수행되는 것일 뿐이다. )
+
+
+### 3. Field & Column Mapping 
+
+- test case 요구사항 추가
+    1. 회원은 일반 회원과 관리자로 구분해야 한다.
+    2. 회원 가입일과 수정일이 있어야 한다.
+    3. 회원을 설명할 수 있는 필드가 있어야 한다. 이 필드는 길이 제한이 없다.
+
+
+
+- Mapping Annotation 
+    - `hibernate.hbm2ddl.auto`
+    <img src="" alt="mapping Annotation">
+    - `@Transient`를 사용하면, Java memory에서만 사용할 수 있고 DB에 반영하지 않음.
+    - 예시 
+    <img src="https://github.com/jay-one11/JPA_study/blob/4697430837f1abdefd3195623435465f353c20c2/image/Field&Column_code.PNG" alt="field&column code">
+    <img src="https://github.com/jay-one11/JPA_study/blob/4697430837f1abdefd3195623435465f353c20c2/image/Field&Column_code_result.PNG" alt="field&column code_result">
+
+- `@Colummn`
+
+    <img src="https://github.com/jay-one11/JPA_study/blob/4697430837f1abdefd3195623435465f353c20c2/image/@Column.PNG" alt="@Column">
+    - `insertable`, `updatable` : 삽입, 수정이 가능한지?
+        - `@column(updateable=false)`하게 되면, 처음 삽입된 data에서 JPA를 통해서는 절대 변경되지 않음 (SQL을 통한 직접 변경은 가능)
+    - `nullable` : `@Column(nullable = false)`하게 되면 NOT NULL 제약조건 추가
+    - `Unique` : unique 명이 랜덤으로 생성되고, 여러 속성을 동시에 줄 수 없단 점에서 자주 사용하지 않음 ( Table 에서 제약조건 추가함 )
+    - `ColumnDefinition` : 데이터베이스 컬럼 정보를 직접 줄 수 있다.
+        - ex) `"varchar(100) default 'EMPTY'"` 
+        - 필드의 자바 타입과 방언 정보를 사용해서 자동으로 반영 가능
+
+- `@Enumerated`
+    - 주의 ! ORDINAL 사용 ❌ String을 사용!!!⭐
+        - ORDINAL 은 Enum의 idx를 DB에 저장하기 때문.. ( 개수가 늘어나면 오류 발생 가능성 ⬆ )
+        - STRING 타입을 사용해서 명시적으로 저장하기
+    - JAVA Enum 타입을 Mapping할 때 사용
+    - ⭐ `@Enumerated(EnumType.STRING)` 을 사용합시다 ⭐
+    <img src="https://github.com/jay-one11/JPA_study/blob/4697430837f1abdefd3195623435465f353c20c2/image/@Enumerated.PNG" alt="@enumerated">
+
+- `@Temporal`
+    - 날짜 타입을 매핑할 때 사용 ( ✔ 최근은 별로 안씀 ,, )
+    - LocalDate, LocalDateTime 을 사용할 때는 아래와 같이 타입으로 생성 가능
+        - ` private LocalDate TestTime; ` 
+        - ` private LocalDateTime testDateTime; `
+
+- `@Lob`
+    - DB의 BLOB, CLOB Type과 Mapping
+    - `@LOB`에는 지정할 수 있는 속성은 없음
+    - Mapping 하는 Field Type이 문자면 CLOB, 나머지는 BLOB Mapping
+        - CLOB : String, Char[], java.sql.CLOB
+        - BLOB : byte[], java.sql.BLOB
+
+- `@Transient`
+    - Field - DB mapping ❌
+    - DB에 저장, 조회 ❌❌
+    - 메모리 상에서만 임시로 어떤 값을 보관하고 싶을 때만 사용
+    ```
+    @Transient
+    private Integer tmp;
+    ```
+
+### 4. 기본 키 매핑
+
+
+
+    

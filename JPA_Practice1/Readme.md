@@ -16,7 +16,7 @@
     - 상품 주문
     - 주문 내역 조회
     - 주문 취소
-    <img src="" alt="Homepage">
+    <img src="/images/Homepage.PNG" alt="Homepage">
 
 ## 도메인 모델 분석
 <img src="" alt="도메인모델분석">

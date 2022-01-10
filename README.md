@@ -4,8 +4,8 @@
 [1차시 : JPA소개](#1차시-JPA소개) ✔ <br/>
 [2차시 : JPA 시작하기](#2차시-JPA-시작하기) ✔ <br/>
 [3차시 : 영속성 관리 - 내부 동작 방식](#3차시-영속성-관리---내부-동작-방식) ✔ <br/> 
-[4차시 : 엔티티 매핑](#4차시-Entity-Mapping) ✔ Now !  <br/> 
-    >> [실전 예제 연습 1](/JPA_Practice1) <br/>
+[4차시 : 엔티티 매핑](#4차시-Entity-Mapping) ✔   <br/> 
+    >> [실전 예제 연습 1](/JPA_Practice1) <br/> ✔ Now !
 [5차시 : 연관관계 매핑 기초](#5차시-연관관계-매핑-기초) <br/>
 [6차시 : 다양한 연관관계 매핑](#6차시-다양한-연관관계-매핑) <br/>
 [7차시 : 고급 매핑](#7차시-고급-매핑) <br/>
@@ -1009,8 +1009,10 @@
     - 위처럼 Sequence들을 저장하는 table을 생성한다.
     - 운영에서 사용하기는 약간 부담스러운 부분 있음
 
+
 - `@TableGenerator` 속성
     <img src="" alt="tableGenerator속성">
+
 
 - 🚩 권장하는 식별자 전략
     - <b>기본 키 제약 조건</b> : null 아님, 유일, 변하면 안된다.
@@ -1018,3 +1020,174 @@
         - ※ 대체키 : 기본키와 상관없는 어떤 값
     - 주민등록번호도 기본 키로 적절하지 않다..
     - ⭐⭐ <b>권장 : Long형 + 대체 키 + 키 생성전략 </b> 사용하기
+
+
+## 5차시 연관관계 매핑 기초
+-----
+
+
+0. 목표
+    - 객체와 테이블 연관관계의 차이를 이해
+    - ⭐ 객체의 참조와 테이블의 외래 키를 매핑 
+    - 용어 이해
+        - 방향 ( Direction ) : 단방향, 양방향
+        - 다중성 ( Multiplicity ) : 다대일(N:1), 일대다(1:N), 일대일(1:1), 다대다(N:M)의 이해
+        - 연관관계의 주인 ( Owner ) : 객체 양방향 연관관계는 관리 주인이 필요
+
+
+1. 연관 관계가 필요한 이유
+    - "객체지향 설계의 목표는 자율적인 객체들의 협력 공동체를 만드는 것이다."
+    - 예제 시나리오
+        - 회원은 팀이 있다.
+        - 회원은 하나의 팀에만 소속될 수 있다.
+        - 회원과 팀은 다대일 관계다.
+        - ex) 객체를 테이블에 맞추어 모델링
+            <img src="./image/객체를테이블에맞추어모델링.PNG" alt="객체를테이블에맞추어모델링">
+            - Member - Team의 관계는 N : 1 이다. (여러명의 회원이 하나의 팀에 소속될 수 있다.)
+            <img src="./image/객체를테이블에맞추어모델링code.PNG" alt="객체를테이블에맞추어모델링code">
+            <img src="./image/객체를테이블에맞추어모델링code2.PNG" alt="객체를테이블에맞추어모델링code2">
+            <img src="./image/객체를테이블에맞추어모델링code3.PNG" alt="객체를테이블에맞추어모델링code3">
+            - 결과 
+        - 위와 같은 방식은 객체를 테이블에 맞추어 데이터 중심으로 모델링 하였기 때문에, 협력 관계를 만들 수 없다.
+            - <B>테이블은 외래 키로 조인</B>을 사용해서 연관된 테이블을 찾는다.
+            - 객체는 참조를 사용해서 연관된 객체를 찾는다.
+            - 이처럼 테이블과 객체 사이에는 이런 큰 간격이 있다.
+
+
+2. 단방향 연관관계
+    - 객체지향 모델링 ( 객체 연관관계 사용 )
+    <img src="./image/객체지향모델링.PNG" alt="객체지향모델링" >
+    <img src="./image/객체지향모델링Code.PNG" alt="객체지향모델링" >
+        - 상관관계와 Join하는 Column을 명시적으로 표시해준다.
+    - 객체지향 모델링 ( ORM 매핑 )
+    <img src="./image/객체지향모델링ORM.PNG" alt="객체지향모델링ORM" >
+        - 객체에서 Member의 변수인 team을 Team 타입으로 선언함으로써, 객체 연관관계를 생성할 수 있고, 이러한 연관관계는 DB에서 Member Table이 Team_ID를 FK로 가질 수 있도록 설정한다.
+    <img src="./image/객체지향모델링ORM_Code.PNG" alt="객체지향모델링ORM_Code.PNG" >
+    - 위와 같은 방법을 사용하면
+    ```
+        Team team = new Team();
+        team.setName("TeamA");
+        em.persist(team);
+
+        // Member에 Team정보 설정하기 (연관관계 X)
+        Member member = new Member();
+        member.setUsername("member1");
+        member.setTeamId(team.getId());
+        em.persist(member);
+
+        // Member에 Team정보 설정하기 (연관관계 O)
+        Member member = new Member();
+        member.setUsername("member1");
+        member.setTeam(team);
+        em.persist(member);
+
+        // Member의 TeamId 조회하기 (연관관계 X)
+        Member findmember1 = em.find(Member.class, member.getId());
+        Team findteam1 = em.find(Team.class, findmember1.getTeamId());
+
+        // Member의 TeamId 조회하기 (연관관계 O)
+        Member findmember1 = em.find(Member.class, member.getId());
+        Team team1 = findmember1.getTeam();
+
+        // Member에 Team정보 수정 (연관관계 X)
+        Member member = em.find(Member.class, adj_member.getId());
+        Long NEW_Team_id = em.find(Team.class, 100L);
+        member.setTeamId(NEW_Team_id);
+
+        // Member에 Team정보 설정하기 (연관관계 O)
+        Member adj_member = em.find(Member.class, adj_member.getId());
+        Team newTeam = em.find(Team.class, 100L);
+        member.setTeam(newTeam); // Forign Key도 자동으로 Update해준다.
+
+    ```
+
+
+3. 양방향 연관관계와 연관관계의 주인
+    - 양방향 매핑
+        <img src="./image/양방향매핑.PNG" alt="양방향매핑.PNG">
+        - 객체는 참조를 사용하고, Table은 연관관계를 사용하는 데, 이 차이로 인해 어려움이 발생합니다... 
+        - 기존 코드는 `member.getTeam()`는 가능했지만, `team. getMembers()`는 불가능했다. (단방향 통신이기 떄문)
+        - 하지만 실제 DB에는 Join 하여 서로 데이터 추출이 가능하다.
+        - 테이블 연관관계는 변동이 없지만 , 객체 연관관계에 차이가 있다.
+        - 예제
+        ```
+        // mappedBy : members가 어떤 객체의 변수와 연관되어있는지
+        // @OneToMany(mappedBy = "team") : Member객체의 "team" 변수를 1:N List<member> members 선언
+        @OneToMany(mappedBy = "team")
+        private List<Member> members = new ArrayList<Member>();
+
+        Member findmember = em.find(Member.class, member.getId());
+        List<Member> members = findmember.getTeam().getMembers();
+        for (Member m:
+                members) {
+            System.out.println("member : " + m.getUsername());
+        }
+        ``` 
+
+
+    - 연관관계의 주인과 mappedBy
+        - 🚩 mappedBy = JPA의 멘탈붕괴 난이도
+        - mappedBy는 처음에는 이해하기 어렵다.
+        - 객체와 테이블간에 연관관계를 맺는 차이를 이해해야 한다.
+
+
+    - ⭐⭐객체와 테이블이 관계를 맺는 차이.
+        - 객체 연관관계 = 2개
+            - 회원 -> 팀 연관관계 1개(단방향)
+            - 팀 -> 회원 연관관계 1개(단방향)
+        - 테이블 연관관계 = 1개
+            - 회원 <-> 팀의 연관관계 1개(양방향)
+        <img src="./image/객체와테이블이관계를맺는차이.PNG">
+        - 결론 : DB에서는 연관관계를 가지면 양방향 통신이 가능하지만, JPA에서는 객체 연관관계를 단방향으로 서로 연결해주어야 한다. (`MappedBy`, `ManyToOne`, `OneToMany` 등 사용)
+
+
+    - 객체의 양방향 관계
+        - 객체의 양방향 관계는 사실 양방향 관계가 아니라 서로 다른 단방향 관계 2개이다.
+        - 객체를 양방향으로 참조하려면 단방향 연관관계를 2개 만들어야 한다.
+        <img src="./image/객체의양방향관계예시.PNG">
+
+
+    - 테이블의 양방향 연관관계
+        - 테이블은 <b>테이블은 외래 키 하나</b>로 두 테이블의 연관관계를 관리
+        - Member.TEAM_ID 외래 키 하나로 양방향 연관관계 가짐 ( 양쪽으로 조인할 수 있다 .)
+        ```
+        SELECT * 
+        FROM MEMBER M
+        JOIN TEAM T ON M.TEAM_ID = T.TEAM_ID 
+        SELECT * 
+        FROM TEAM T
+        JOIN MEMBER M ON T.TEAM_ID = M.TEAM_ID
+        ```
+        - 둘 중 하나로 외래 키를 관리해야 한다.
+        <img src="./image/둘중하나로외래키를관리.PNG" >
+            - 🤔 딜레마 .....  Member의 Team을 변경해주고 싶을 때 Team의 members를 변경할 것인가.. Member의 team을 변경할 것인가...
+
+
+    - 연관 관계의 주인 ( Owner )
+        - 양방향 매핑 규칙
+            - 객체의 두 관계중 하나를 연관관계의 주인으로 지정
+            - ⭐ 연관관계의 주인만이 외래키를 관리 ( 등록, 수정 )
+            - ⭐ 주인이 아닌 쪽은 읽기만 가능
+            - ⭐ 주인은 mappedBy 속성 사용 X
+            - 주인이 아니면 MappedBy 속성으로 주인 지정
+
+
+    - 누구를 주인으로 해야하는가 ? 
+        - 외래 키가 있는 곳을 주인으로 정해라.
+        - 여기서는 Member.team이 연관관계의 주인
+        <img src="./image/누구를주인으로.PNG">
+
+    - 양방향 매핑 시 가장 많이하는 실수 (연관관계의 주인에 값을 입력하지 않음)
+        <img src="./image/양방향매핑시가장많이하는실수.PNG">
+        - 🌟🌟 Table로 만들었을 때 FK가 있는 곳을 주인으로 해라!!!
+        - 잘못하면 Update가 다른 테이블에서 진행될 수 도 있음
+
+    - 양방향 매핑 시 연관관계의 주인에 값을 입력해야 한다. (순수한 객체 관계를 고려하면 항상 양쪽 다 값을 입력해야 한다.)
+        - 순수 객체 상태를 고려해서 항상 양쪽에 값을 설정하자
+        - 양방향 매핑시에 무한 루프를 조심하자
+            - ex) toString(), lombok, JSON 생성 라이브러리
+
+
+
+
+4. [실전예제 - 2.연관관계 매핑 시작](/JPA_Practice2)
